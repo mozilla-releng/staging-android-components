@@ -6,8 +6,8 @@ policy:
 tasks:
     - $let:
           taskgraph:
-              branch: taskgraph
-              revision: 32c7e914db92719dc1c508f4c08a02ac75e94105
+              branch: taskgraph-try
+              revision: 0a1a6bfc7c87e1125f0bf56841aa5fc6d89dfb09
           trustDomain: mobile
       in:
           $let:
@@ -189,6 +189,20 @@ tasks:
                                                 - index.mobile.v2.${project}.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
                                                 - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
                                                 - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
+                                    # XXX Temporary hack. Do not merge on the master branch
+                                    - $if: 'level == "1"'
+                                      then:
+                                          - $if: 'tasks_for == "github-push"'
+                                            then:
+                                                - index.garbage.mobile.v2.${project}.branch.${short_head_branch}.latest.taskgraph.decision
+                                                - index.garbage.mobile.v2.${project}.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
+                                                - index.garbage.mobile.v2.${project}.revision.${head_sha}.taskgraph.decision
+                                          - $if: 'tasks_for == "cron"'
+                                            then:
+                                                # cron context provides ${head_branch} as a short one
+                                                - index.garbage.mobile.v2.${project}.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
+                                                - index.garbage.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
+                                                - index.garbage.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
                             scopes:
                                 # `https://` is 8 characters so, ${repoUrl[8:]} is the repository without the protocol.
                                 $if: 'tasks_for == "github-push"'

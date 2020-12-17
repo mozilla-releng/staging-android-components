@@ -133,7 +133,7 @@ treeherder:
         samples-browser-system: samples-browser-system
 
 
-task-priority: highest
+task-priority: low
 
 taskgraph:
     register: ac_taskgraph:register
@@ -164,7 +164,7 @@ workers:
             provisioner: scriptworker-k8s
             implementation: scriptworker-github
             os: scriptworker
-            worker-type: 'mobile-{level}-github'
+            worker-type: 'mobile-{level}-github-dev'
         images:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
