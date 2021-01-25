@@ -189,8 +189,8 @@ tasks:
                                                 - index.mobile.v2.${project}.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
                                                 - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
                                                 - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
-                                    # XXX Temporary hack. Do not merge on the master branch
-                                    - $if: 'level == "1"'
+                                    # XXX Ideally we find a more elegant solution here.
+                                    - $if: 'repoUrl == "https://github.com/mozilla-releng/staging-android-components"'
                                       then:
                                           - $if: 'tasks_for == "github-push"'
                                             then:
